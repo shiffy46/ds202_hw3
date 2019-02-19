@@ -1,0 +1,73 @@
+---
+title: 'Homework #3'
+author: "Sam Shifflett; shiffy46"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data(tips, package="reshape2")
+library(ggplot2)
+```
+```{r}
+head(tips)
+```
+
+1.)
+```{r}
+numparty <- NROW(tips)
+numparty
+```
+2.)
+```{r}
+sapply(tips, typeof)
+```
+3.)
+```{r}
+day <- factor(tips$day)
+week <- c("Thur","Fri","Sat","Sun")
+day <- day[order(match(day, week))]
+day
+```
+4.)
+```{r}
+female5 <- tips[ which(tips$sex=='Female' & tips$size >= 5), ]
+female5
+```
+5.) 
+```{r}
+ggplot(tips,aes(y=tip,x=total_bill))+geom_point()+geom_smooth(se=FALSE)
+```
+
+
+The anomolies in this dataset have to do with the large variance in the consistency with the data points. The first type of anomoly is the inflation of data points with over zealous tipping customers. The second is the lower end tippers. With such a large variance it is hard to be predictive with these statisitics.
+6.)
+```{r}
+tips$tiprate = round(((tips$tip/tips$total_bill)*100),2)
+averageTipRate = mean(tips$tiprate)
+round(averageTipRate,2)
+```
+The average tip rate is 16.08%.
+
+7.)
+```{r}
+ggplot(tips,aes(x=time,y=tiprate, color=time))+geom_boxplot()+scale_x_discrete(limits=c("Lunch","Dinner"))
+```
+8.)
+```{r}
+ggplot(tips, aes(x=total_bill,y=tip))+geom_smooth(se=FALSE, aes(color=sex,linetype = smoker))
+```
+
+
+This is an interesting observation, it seems that the smokers are more generous for lower costing food(more tips). But, as soon as the bill goes over 25$ there is a dramatic shift in tip amount for the smokers. There is also more of a consistent linear ascent for the non-smokers as compared to the volatility of the smokers.
+
+9.)
+```{r}
+ggplot(data=tips, aes(x=day)) + geom_bar(aes(fill=sex),position='dodge')
+```
+
+
+Seems like males pay way more than females, not surprising though.... The spike in thrusday's female participation  is interesting. I Might take this into consideration.
